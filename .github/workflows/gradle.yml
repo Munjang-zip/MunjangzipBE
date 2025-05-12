@@ -76,9 +76,6 @@ jobs:
               -e AZURE_DB_PASSWORD="${{ secrets.AZURE_DB_PASSWORD }}" \
               -e AZURE_STORAGE_ACCOUNT="${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
               -e AZURE_STORAGE_KEY="${{ secrets.AZURE_STORAGE_KEY }}" \
-              -e KEY_STORE_PASSWORD="${{ secrets.KEY_STORE_PASSWORD }}" \
               -e NAVER_API_ID="${{ secrets.NAVER_API_ID }}" \
               -e NAVER_API_SECRET="${{ secrets.NAVER_API_SECRET }}" \
-              -e LOCAL_DB_NAME="${{ secrets.LOCAL_DB_NAME }}" \
-              -e LOCAL_DB_PW="${{ secrets.LOCAL_DB_PW }}" \
               ${{ secrets.DOCKER_USERNAME }}/gdg-project:latest
