@@ -27,16 +27,12 @@ public class MemberCommandServiceImpl implements MemberCommandService{
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
+    @Transactional
     public Member findMemberById(Long memberId) {
         return memberRepository
                 .findById(memberId)
                 .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
     }
-
-
-
-
-
 
     @Override
     @Transactional
