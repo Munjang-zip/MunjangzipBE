@@ -76,6 +76,8 @@ jobs:
               -e AZURE_DB_PASSWORD="${{ secrets.AZURE_DB_PASSWORD }}" \
               -e AZURE_STORAGE_ACCOUNT="${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
               -e AZURE_STORAGE_KEY="${{ secrets.AZURE_STORAGE_KEY }}" \
+              -e KAKAO_ADMIN_KEY="${{ secrets.KAKAO_ADMIN_KEY }}" \
+              -e GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}" \
               -e NAVER_API_ID="${{ secrets.NAVER_API_ID }}" \
               -e NAVER_API_SECRET="${{ secrets.NAVER_API_SECRET }}" \
               ${{ secrets.DOCKER_USERNAME }}/gdg-project:latest
