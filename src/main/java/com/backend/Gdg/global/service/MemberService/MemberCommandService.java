@@ -10,4 +10,8 @@ public interface MemberCommandService {
     void emailRegister(AuthRequestDTO.EmailRegisterRequest request);
     AuthResponseDTO.EmailLoginResponse emailLogin(AuthRequestDTO.EmailLoginRequest request);
     AuthResponseDTO.TokenRefreshResponse refreshToken(String refreshToken);
+    AuthResponseDTO.OAuthResponse loginWithKakaoAccessToken(String kakaoAccessToken);
+    void logout(String accessToken);
+    void withdraw(String accessToken);
+
 }

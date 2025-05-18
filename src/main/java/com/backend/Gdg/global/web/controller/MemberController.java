@@ -47,4 +47,25 @@ public class MemberController {
         AuthResponseDTO.TokenRefreshResponse response = memberService.refreshToken(request.getRefreshToken());
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, response);
     }
+
+    @PostMapping("/login/kakao")
+    @Operation(summary = "카카오 로그인 API", description = "카카오 accessToken으로 로그인합니다.")
+    public ApiResponse<AuthResponseDTO.OAuthResponse> kakaoLogin(@RequestBody AuthRequestDTO.KakaoLoginRequest request) {
+        AuthResponseDTO.OAuthResponse response = memberService.loginWithKakaoAccessToken(request.getAccessToken());
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, response);
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃 API", description = "accessToken을 무효화하고 refreshToken을 삭제합니다.")
+    public ApiResponse<Void> logout(@RequestHeader("Authorization") String accessToken) {
+        memberService.logout(accessToken);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, null);
+    }
+
+    @DeleteMapping("/withdraw")
+    @Operation(summary = "회원탈퇴 API", description = "카카오 계정 연결을 해제하고 사용자 탈퇴 처리합니다.")
+    public ApiResponse<Void> withdraw(@RequestHeader("Authorization") String accessToken) {
+        memberService.withdraw(accessToken);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, null);
+    }
 }

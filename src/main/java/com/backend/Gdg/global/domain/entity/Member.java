@@ -44,6 +44,12 @@ public class Member {
 
     private String profileImage;
 
+    @Column(length = 50)
+    private String provider;
+
+    @Column(length = 255)
+    private String providerId;
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Category> categories = new ArrayList<>();
 
