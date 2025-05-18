@@ -2,6 +2,7 @@ package com.backend.Gdg.global.web.controller;
 
 import com.backend.Gdg.global.apiPayload.code.status.SuccessStatus;
 import com.backend.Gdg.global.apiPayload.ApiResponse;
+import com.backend.Gdg.global.domain.enums.OAuth2Provider;
 import com.backend.Gdg.global.service.MemberService.MemberCommandService;
 import com.backend.Gdg.global.web.dto.Member.AuthRequestDTO;
 import com.backend.Gdg.global.web.dto.Member.AuthResponseDTO;
@@ -48,24 +49,34 @@ public class MemberController {
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, response);
     }
 
-    @PostMapping("/login/kakao")
-    @Operation(summary = "카카오 로그인 API", description = "카카오 accessToken으로 로그인합니다.")
-    public ApiResponse<AuthResponseDTO.OAuthResponse> kakaoLogin(@RequestBody AuthRequestDTO.KakaoLoginRequest request) {
-        AuthResponseDTO.OAuthResponse response = memberService.loginWithKakaoAccessToken(request.getAccessToken());
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, response);
+    @PostMapping("/oauth/login")
+    @Operation(summary = "소셜 로그인", description = "Google 또는 Kakao 소셜 로그인")
+    public ApiResponse<AuthResponseDTO.OAuthResponse> oauthLogin(
+            @RequestParam("provider") OAuth2Provider provider,
+            @RequestParam("token") String token
+    ) {
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK,memberService.loginWithOAuth(provider, token));
+    }
+
+    @PostMapping("/token/refresh")
+    @Operation(summary = "토큰 재발급", description = "Refresh Token으로 AccessToken 재발급")
+    public ApiResponse<AuthResponseDTO.TokenRefreshResponse> refreshToken(
+            @RequestParam("refreshToken") String refreshToken
+    ) {
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK,memberService.refreshToken(refreshToken));
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "로그아웃 API", description = "accessToken을 무효화하고 refreshToken을 삭제합니다.")
+    @Operation(summary = "로그아웃", description = "AccessToken으로 로그아웃")
     public ApiResponse<Void> logout(@RequestHeader("Authorization") String accessToken) {
         memberService.logout(accessToken);
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, null);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK,null);
     }
 
     @DeleteMapping("/withdraw")
-    @Operation(summary = "회원탈퇴 API", description = "카카오 계정 연결을 해제하고 사용자 탈퇴 처리합니다.")
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 처리")
     public ApiResponse<Void> withdraw(@RequestHeader("Authorization") String accessToken) {
         memberService.withdraw(accessToken);
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK, null);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_OK,null);
     }
 }

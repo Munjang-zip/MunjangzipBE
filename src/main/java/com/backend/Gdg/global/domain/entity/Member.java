@@ -1,6 +1,7 @@
 package com.backend.Gdg.global.domain.entity;
 
 import com.backend.Gdg.global.domain.enums.Gender;
+import com.backend.Gdg.global.domain.enums.OAuth2Provider;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -44,8 +45,8 @@ public class Member {
 
     private String profileImage;
 
-    @Column(length = 50)
-    private String provider;
+    @Enumerated(EnumType.STRING)
+    private OAuth2Provider provider;
 
     @Column(length = 255)
     private String providerId;

@@ -52,10 +52,13 @@ public class AuthRequestDTO {
     }
 
     @Getter
-    public class KakaoLoginRequest {
-        private String accessToken;
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class KakaoUserInfo {
+        private String providerId;
+        private String email;
+        private String nickname;
     }
-
-
 
 }
