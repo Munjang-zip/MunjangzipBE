@@ -31,8 +31,6 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryConverter.toCategoryResponseDTO(savedCategory);
     }
 
-
-
     @Override
     @Transactional
     public CategoryResponseDTO updateCategory(Long memberId,Long categoryId, CategoryRequestDTO request) {
@@ -50,7 +48,6 @@ public class CategoryServiceImpl implements CategoryService {
 
         return CategoryConverter.toCategoryResponseDTO(updatedCategory);
     }
-
 
     @Override
     @Transactional

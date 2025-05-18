@@ -22,12 +22,9 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
-    private final BookImageRepository bookImageRepository;
-    private final UuidRepository uuidRepository;
     private final MemberRepository memberRepository;
     private final ParagraphImageRepository paragraphImageRepository;
-    private final AzureBlobManager blobManager;
-
+    private final ParagraphRepository paragraphRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,8 +33,14 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다."));
         List<Category> categories = categoryRepository.findByMember_MemberId(memberId);
         List<BookResponseDTO.MainBookResponseDTO> categoryList = categories.stream()
-                .map(BookConverter::toMainBookResponseDTO)
+                .map(cat -> {
+                    String recentCover = bookRepository.findLatestCoverByCategory(cat.getCategoryId());
+                    long bookCount   = bookRepository.countByCategoryCategoryId(cat.getCategoryId());
+                    long memoCount   = paragraphRepository.countByBookCategoryCategoryId(cat.getCategoryId());
+                    return BookConverter.toMainBookResponseDTO(cat, recentCover, bookCount, memoCount);
+                })
                 .collect(Collectors.toList());
+
         return BookResponseDTO.MainBookListResponseDTO.builder()
                 .nickName(member.getNickName())
                 .libraryName(member.getLibraryName())
@@ -46,7 +49,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
     public BookResponseDTO.BookRegisterResponseDTO registerBook(Long categoryId, BookRequestDTO.BookRegisterResquestDTO request,Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다."));
