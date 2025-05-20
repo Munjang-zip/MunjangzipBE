@@ -51,5 +51,34 @@ public class AuthRequestDTO {
         String refreshToken;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class KakaoUserInfo {
+        private String providerId;
+        private String email;
+        private String nickname;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UserProfile {
+        @NotBlank(message = "닉네임은 필수입니다.")
+        @Size(max = 200, message = "닉네임은 200자 이내로 입력해주세요.")
+        private String nickname;
+
+        @NotBlank(message = "도서관 이름은 필수입니다.")
+        private String libraryName;
+
+        @NotBlank(message = "캐릭터 선택은 필수입니다.")
+        private String character;
+
+        @NotBlank(message = "캐릭터 이름은 필수입니다.")
+        private String characterName;
+    }
+
 
 }
