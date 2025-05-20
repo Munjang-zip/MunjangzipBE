@@ -30,7 +30,7 @@ public class Member {
     private String characterName;
 
     @Column(length = 255, nullable = false)
-    private String character;
+    private String characterType;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -68,7 +68,7 @@ public class Member {
     public void updateProfile(String nickname, String libraryName, String character, String characterName) {
         this.nickName = nickname;
         this.libraryName = libraryName;
-        this.character = character;
+        this.characterType = character;
         this.characterName = characterName;
     }
 }

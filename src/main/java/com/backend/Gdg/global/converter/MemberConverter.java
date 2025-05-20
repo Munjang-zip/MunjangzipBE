@@ -1,7 +1,6 @@
 package com.backend.Gdg.global.converter;
 
 import com.backend.Gdg.global.domain.entity.Member;
-import com.backend.Gdg.global.web.dto.Member.AuthRequestDTO;
 import com.backend.Gdg.global.web.dto.Member.AuthResponseDTO;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ public class MemberConverter {
                 .memberId(member.getMemberId())
                 .nickname(member.getNickName())
                 .libraryName(member.getLibraryName())
-                .character(member.getCharacter())
+                .character(member.getCharacterType())
                 .characterName(member.getCharacterName())
                 .build();
     }
