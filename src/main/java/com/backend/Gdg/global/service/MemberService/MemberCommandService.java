@@ -11,10 +11,11 @@ public interface MemberCommandService {
     void emailRegister(AuthRequestDTO.EmailRegisterRequest request);
     AuthResponseDTO.EmailLoginResponse emailLogin(AuthRequestDTO.EmailLoginRequest request);
     AuthResponseDTO.TokenRefreshResponse refreshToken(String refreshToken);
-    void logout(String accessToken);
-    void withdraw(String accessToken);
+    void logout(Member member);
+    void withdraw(Member member);
 
     AuthResponseDTO.OAuthResponse loginWithOAuth(OAuth2Provider provider, String token);
 
+    AuthResponseDTO.UserProfileResponse registerUserProfile(Member member,AuthRequestDTO.UserProfile request);
 
 }

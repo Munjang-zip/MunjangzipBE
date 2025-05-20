@@ -28,6 +28,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuthStrategyFactory oAuthStrategyFactory;
+    private final MemberConverter memberConverter;
 
     @Override
     @Transactional(readOnly = true)
@@ -95,33 +96,30 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     }
 
     @Override
-    public void logout(String accessToken) {
-        if (accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
-        }
-
-        Long memberId = jwtTokenProvider.getId(accessToken);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
+    public void logout(Member member) {
         member.updateToken(null, null);
         memberRepository.save(member);
     }
 
     @Override
-    public void withdraw(String accessToken) {
-        if (accessToken.startsWith("Bearer ")) {
-            accessToken = accessToken.substring(7);
-        }
-
-        Long memberId = jwtTokenProvider.getId(accessToken);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberException(ErrorStatus.MEMBER_NOT_FOUND));
-
+    public void withdraw(Member member) {
         OAuthStrategy strategy = oAuthStrategyFactory.getStrategy(
                 OAuth2Provider.valueOf(member.getProvider().name()));
         strategy.unlink(member.getProviderId());
 
         memberRepository.delete(member);
     }
+
+    @Override
+    public AuthResponseDTO.UserProfileResponse registerUserProfile(Member member, AuthRequestDTO.UserProfile request) {
+        member.updateProfile(
+                request.getNickname(),
+                request.getLibraryName(),
+                request.getCharacter(),
+                request.getCharacterName()
+        );
+
+        return memberConverter.toUserProfile(member);
+    }
+
 }

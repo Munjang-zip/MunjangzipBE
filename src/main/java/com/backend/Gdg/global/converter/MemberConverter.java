@@ -1,8 +1,11 @@
 package com.backend.Gdg.global.converter;
 
 import com.backend.Gdg.global.domain.entity.Member;
+import com.backend.Gdg.global.web.dto.Member.AuthRequestDTO;
 import com.backend.Gdg.global.web.dto.Member.AuthResponseDTO;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MemberConverter {
 
     public static AuthResponseDTO.EmailLoginResponse toEmailLoginResponse(String accessToken, String refreshToken, Member member) {
@@ -18,6 +21,16 @@ public class MemberConverter {
         return AuthResponseDTO.TokenRefreshResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    public static AuthResponseDTO.UserProfileResponse toUserProfile(Member member) {
+        return AuthResponseDTO.UserProfileResponse.builder()
+                .memberId(member.getMemberId())
+                .nickname(member.getNickName())
+                .libraryName(member.getLibraryName())
+                .character(member.getCharacter())
+                .characterName(member.getCharacterName())
                 .build();
     }
 }

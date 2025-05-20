@@ -26,6 +26,12 @@ public class Member {
     @Column(length = 255, nullable = false)
     private String libraryName;
 
+    @Column(length = 255, nullable = false)
+    private String characterName;
+
+    @Column(length = 255, nullable = false)
+    private String character;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -57,5 +63,12 @@ public class Member {
     public void updateToken(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+    }
+
+    public void updateProfile(String nickname, String libraryName, String character, String characterName) {
+        this.nickName = nickname;
+        this.libraryName = libraryName;
+        this.character = character;
+        this.characterName = characterName;
     }
 }
