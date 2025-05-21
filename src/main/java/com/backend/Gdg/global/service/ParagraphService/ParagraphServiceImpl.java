@@ -29,6 +29,7 @@ public class ParagraphServiceImpl implements ParagraphService {
     private final ParagraphImageRepository paragraphImageRepository;
 
     @Override
+    @Transactional
     public ParagraphResponseDTO addParagraph(ParagraphRequestDTO request, Long memberId) {
         // 책 및 회원 검증
         Book book = bookRepository.findById(request.getBookId())
@@ -67,6 +68,7 @@ public class ParagraphServiceImpl implements ParagraphService {
     }
 
     @Override
+    @Transactional
     public ParagraphResponseDTO updateParagraph(Long paragraphId, Long memberId, ParagraphUpdateRequestDTO request) {
         // 필사 존재 여부 및 수정 권한 검증: 필사 작성자만 수정 가능
         Paragraph paragraph = paragraphRepository.findById(paragraphId)
@@ -104,6 +106,7 @@ public class ParagraphServiceImpl implements ParagraphService {
     }
 
     @Override
+    @Transactional
     public ParagraphResponseDTO deleteParagraph(Long paragraphId, Long memberId) {
         // 필사 존재 여부 및 삭제 권한 검증: 오직 필사를 추가한 사용자만 삭제 가능
         Paragraph paragraph = paragraphRepository.findById(paragraphId)
@@ -138,6 +141,7 @@ public class ParagraphServiceImpl implements ParagraphService {
     private final UuidRepository uuidRepository;
 
     @Override
+    @Transactional
     public void uploadParagraphImage(Long bookId, Long memberId, MultipartFile image, int color) {
         // 책 검증
         Book book = bookRepository.findById(bookId)
