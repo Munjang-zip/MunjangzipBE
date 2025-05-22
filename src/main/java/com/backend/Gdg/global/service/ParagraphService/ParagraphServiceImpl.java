@@ -1,6 +1,7 @@
 package com.backend.Gdg.global.service.ParagraphService;
 
 import com.backend.Gdg.global.azure.blob.AzureBlobManager;
+import com.backend.Gdg.global.converter.ParagraphConverter;
 import com.backend.Gdg.global.domain.entity.*;
 import com.backend.Gdg.global.repository.*;
 import com.backend.Gdg.global.web.dto.Paragraph.ParagraphRequestDTO;
@@ -27,6 +28,7 @@ public class ParagraphServiceImpl implements ParagraphService {
     private final ParagraphRepository paragraphRepository;
     private final AzureBlobManager blobManager;
     private final ParagraphImageRepository paragraphImageRepository;
+    private final ParagraphConverter paragraphConverter;
 
     @Override
     @Transactional
@@ -51,20 +53,10 @@ public class ParagraphServiceImpl implements ParagraphService {
         paragraphRepository.save(paragraph);
 
         // 해당 책의 모든 필사 조회 후 응답 DTO 매핑
-        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphRepository
-                .findByBook_BookId(book.getBookId())
-                .stream()
-                .map(p -> ParagraphResponseDTO.ParagraphDetail.builder()
-                        .paragraph_id(p.getParagraphId())
-                        .content(p.getContent())
-                        .imageUrl(p.getImageUrl())
-                        .color(p.getUserColor())
-                        .build())
-                .collect(Collectors.toList());
+        List<Paragraph> all = paragraphRepository.findByBook_BookId(book.getBookId());
+        List<ParagraphResponseDTO.ParagraphDetail> details = paragraphConverter.toDetailList(all);
 
-        return ParagraphResponseDTO.builder()
-                .paragraph(paragraphDetails)
-                .build();
+        return ParagraphResponseDTO.builder().paragraph(details).build();
     }
 
     @Override
@@ -89,16 +81,8 @@ public class ParagraphServiceImpl implements ParagraphService {
 
         // 수정 후 해당 책의 모든 필사 목록 조회 및 응답 DTO 매핑
         Book book = paragraph.getBook();
-        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphRepository
-                .findByBook_BookId(book.getBookId())
-                .stream()
-                .map(p -> ParagraphResponseDTO.ParagraphDetail.builder()
-                        .paragraph_id(p.getParagraphId())
-                        .content(p.getContent())
-                        .imageUrl(p.getImageUrl())
-                        .color(p.getUserColor())
-                        .build())
-                .collect(Collectors.toList());
+        List<Paragraph> theParagraph = paragraphRepository.findByBook_BookId(book.getBookId());
+        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphConverter.toDetailList(theParagraph);
 
         return ParagraphResponseDTO.builder()
                 .paragraph(paragraphDetails)
@@ -122,17 +106,8 @@ public class ParagraphServiceImpl implements ParagraphService {
         paragraphRepository.delete(paragraph);
 
         // 삭제 후 해당 책의 남은 필사 목록 조회 및 응답 매핑
-        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphRepository
-                .findByBook_BookId(book.getBookId())
-                .stream()
-                .map(p -> ParagraphResponseDTO.ParagraphDetail.builder()
-                        .paragraph_id(p.getParagraphId())
-                        .content(p.getContent())
-                        .imageUrl(p.getImageUrl())
-                        .color(p.getUserColor())
-                        .build())
-                .collect(Collectors.toList());
-
+        List<Paragraph> theParagraph = paragraphRepository.findByBook_BookId(book.getBookId());
+        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphConverter.toDetailList(theParagraph);
         return ParagraphResponseDTO.builder()
                 .paragraph(paragraphDetails)
                 .build();
