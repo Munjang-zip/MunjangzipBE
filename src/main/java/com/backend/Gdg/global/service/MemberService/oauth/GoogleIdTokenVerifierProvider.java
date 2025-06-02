@@ -17,6 +17,7 @@ import java.util.Collections;
 @Slf4j
 public class GoogleIdTokenVerifierProvider {
 
+    //구글 웹앱 ClinetId
     @Value("${google.client-id}")
     private String clientId;
 
