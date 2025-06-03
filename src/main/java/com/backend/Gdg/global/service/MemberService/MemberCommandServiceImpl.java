@@ -115,8 +115,8 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         member.updateProfile(
                 request.getNickname(),
                 request.getLibraryName(),
-                request.getCharacter(),
-                request.getCharacterName()
+                request.getPet(),
+                request.getPetName()
         );
 
         return memberConverter.toUserProfile(member);

@@ -44,8 +44,8 @@ public class AuthResponseDTO {
         private Long memberId;
         private String nickname;
         private String libraryName;
-        private String character;
-        private String characterName;
+        private String pet;
+        private String petName;
     }
 
 

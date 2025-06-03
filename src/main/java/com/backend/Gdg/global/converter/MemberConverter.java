@@ -28,8 +28,8 @@ public class MemberConverter {
                 .memberId(member.getMemberId())
                 .nickname(member.getNickName())
                 .libraryName(member.getLibraryName())
-                .character(member.getCharacterType())
-                .characterName(member.getCharacterName())
+                .pet(member.getCharacterType())
+                .petName(member.getCharacterName())
                 .build();
     }
 }
