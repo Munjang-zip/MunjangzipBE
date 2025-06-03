@@ -20,16 +20,16 @@ public class Member {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String nickName;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String libraryName;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String characterName;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String characterType;
 
     @Enumerated(EnumType.STRING)
@@ -41,10 +41,10 @@ public class Member {
     @Column(length = 255)
     private String refreshToken;
 
-    @Column(length = 255, nullable = false, unique = true)
+    @Column(length = 255, nullable = true, unique = true)
     private String email;
 
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String password;
 
     private Long age;
