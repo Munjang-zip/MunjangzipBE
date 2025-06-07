@@ -74,10 +74,10 @@ public class AuthRequestDTO {
         private String libraryName;
 
         @NotBlank(message = "캐릭터 선택은 필수입니다.")
-        private String character;
+        private String pet;
 
         @NotBlank(message = "캐릭터 이름은 필수입니다.")
-        private String characterName;
+        private String petName;
     }
 
 
