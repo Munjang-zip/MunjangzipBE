@@ -12,6 +12,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
          FROM Book b
         WHERE b.category.categoryId = :categoryId
         ORDER BY b.registerAt DESC, b.bookId DESC
+        LIMIT 1
     """)
     String findLatestCoverByCategory(@Param("categoryId") Long categoryId);
 

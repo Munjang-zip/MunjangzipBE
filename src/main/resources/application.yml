@@ -2,14 +2,14 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 로컬 테스트용
-    # url: jdbc:mysql://localhost:3306/gdg
-    # username: ${LOCAL_DB_NAME}
-    # password: ${LOCAL_DB_PW}
+    url: jdbc:mysql://localhost:3306/gdg
+    username: ${LOCAL_DB_NAME}
+    password: ${LOCAL_DB_PW}
 
-    # Azure Database for MySQL (Flexible Server) 배포용
-    url: jdbc:mysql://munjangzip-db.mysql.database.azure.com:3306/munjangzip_db?sslMode=REQUIRED
-    username: ${AZURE_DB_USERNAME}      # ex. root@munjangzip-db
-    password: ${AZURE_DB_PASSWORD}
+#    # Azure Database for MySQL (Flexible Server) 배포용
+#    url: jdbc:mysql://munjangzip-db.mysql.database.azure.com:3306/munjangzip_db?sslMode=REQUIRED
+#    username: ${AZURE_DB_USERNAME}      # ex. root@munjangzip-db
+#    password: ${AZURE_DB_PASSWORD}
 
   jpa:
     properties:
