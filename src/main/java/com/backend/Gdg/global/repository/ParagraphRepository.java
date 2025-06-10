@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ParagraphRepository extends JpaRepository<Paragraph, Long> {
     List<Paragraph> findByBook_BookId(Long bookId);
+    long countByBookCategoryCategoryId(Long categoryId);
+
 }
