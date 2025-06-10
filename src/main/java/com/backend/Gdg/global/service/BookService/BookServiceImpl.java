@@ -27,16 +27,25 @@ public class BookServiceImpl implements BookService {
     private final MemberRepository memberRepository;
     private final ParagraphImageRepository paragraphImageRepository;
     private final AzureBlobManager blobManager;
+    private final ParagraphRepository paragraphRepository;
+
 
 
     @Override
+    @Transactional(readOnly = true)
     public BookResponseDTO.MainBookListResponseDTO getMainBook(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 멤버가 존재하지 않습니다."));
         List<Category> categories = categoryRepository.findByMember_MemberId(memberId);
         List<BookResponseDTO.MainBookResponseDTO> categoryList = categories.stream()
-                .map(BookConverter::toMainBookResponseDTO)
+                .map(cat -> {
+                    String recentCover = bookRepository.findLatestCoverByCategory(cat.getCategoryId());
+                    long bookCount   = bookRepository.countByCategoryCategoryId(cat.getCategoryId());
+                    long memoCount   = paragraphRepository.countByBookCategoryCategoryId(cat.getCategoryId());
+                    return BookConverter.toMainBookResponseDTO(cat, recentCover, bookCount, memoCount);
+                })
                 .collect(Collectors.toList());
+
         return BookResponseDTO.MainBookListResponseDTO.builder()
                 .nickName(member.getNickName())
                 .libraryName(member.getLibraryName())
@@ -55,11 +64,11 @@ public class BookServiceImpl implements BookService {
         Book book = BookConverter.toBook(request, category, member);
         Book savedBook = bookRepository.save(book);
 
-
         return BookConverter.toBookRegisterResponseDTO(savedBook);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BookResponseDTO.BookByCategoryResponseDTO getBooksByCategory(Long categoryId, Long memberId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 카테고리를 찾을 수 없습니다."));
@@ -73,6 +82,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public BookDetailResponseDTO getBookDetail(Long bookId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 책이 존재하지 않습니다."));
