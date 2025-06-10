@@ -1,6 +1,7 @@
 package com.backend.Gdg.global.service.ParagraphService;
 
 import com.backend.Gdg.global.azure.blob.AzureBlobManager;
+import com.backend.Gdg.global.converter.ParagraphConverter;
 import com.backend.Gdg.global.domain.entity.*;
 import com.backend.Gdg.global.repository.*;
 import com.backend.Gdg.global.web.dto.Paragraph.ParagraphRequestDTO;
@@ -27,6 +28,8 @@ public class ParagraphServiceImpl implements ParagraphService {
     private final ParagraphRepository paragraphRepository;
     private final AzureBlobManager blobManager;
     private final ParagraphImageRepository paragraphImageRepository;
+    private final ParagraphConverter paragraphConverter;
+
 
     @Override
     public ParagraphResponseDTO addParagraph(ParagraphRequestDTO request, Long memberId) {
@@ -50,20 +53,11 @@ public class ParagraphServiceImpl implements ParagraphService {
         paragraphRepository.save(paragraph);
 
         // 해당 책의 모든 필사 조회 후 응답 DTO 매핑
-        List<ParagraphResponseDTO.ParagraphDetail> paragraphDetails = paragraphRepository
-                .findByBook_BookId(book.getBookId())
-                .stream()
-                .map(p -> ParagraphResponseDTO.ParagraphDetail.builder()
-                        .paragraph_id(p.getParagraphId())
-                        .content(p.getContent())
-                        .imageUrl(p.getImageUrl())
-                        .color(p.getUserColor())
-                        .build())
-                .collect(Collectors.toList());
+        List<Paragraph> all = paragraphRepository.findByBook_BookId(book.getBookId());
+        List<ParagraphResponseDTO.ParagraphDetail> details = paragraphConverter.toDetailList(all);
 
-        return ParagraphResponseDTO.builder()
-                .paragraph(paragraphDetails)
-                .build();
+        return ParagraphResponseDTO.builder().paragraph(details).build();
+
     }
 
     @Override
